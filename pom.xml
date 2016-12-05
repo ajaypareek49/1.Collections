@@ -46,6 +46,19 @@
             <artifactId>guava</artifactId>
             <version>13.0.1</version>
         </dependency>
+<<<<<<< HEAD
+=======
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>13.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+>>>>>>> 358ff713bd13b5fe25ae9ace1a484e5b5ed8f26c
     </dependencies>
 
 
