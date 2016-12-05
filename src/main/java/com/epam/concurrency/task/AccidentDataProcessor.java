@@ -35,7 +35,7 @@ public class AccidentDataProcessor {
 
 
     public void init(){
-        fileQueue.add(FILE_PATH_1);
+         fileQueue.add(FILE_PATH_1);
         //fileQueue.add(FILE_PATH_2);
         //fileQueue.add(FILE_PATH_3);
         //fileQueue.add(FILE_PATH_4);
