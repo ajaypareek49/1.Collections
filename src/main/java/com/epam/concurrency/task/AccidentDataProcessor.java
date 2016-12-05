@@ -1,18 +1,22 @@
 package com.epam.concurrency.task;
 
 import com.epam.data.RoadAccident;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * Created by Tanmoy on 6/17/2016.
  */
 public class AccidentDataProcessor {
 
-    private static final String FILE_PATH_1 = "src/main/resources/DfTRoadSafety_Accidents_2010.csv";
+    private static final String FILE_PATH_1 = "src/main/resources/DfTRoadSafety_Accidents_2009.csv";
     private static final String FILE_PATH_2 = "src/main/resources/DfTRoadSafety_Accidents_2011.csv";
     private static final String FILE_PATH_3 = "src/main/resources/DfTRoadSafety_Accidents_2012.csv";
     private static final String FILE_PATH_4 = "src/main/resources/DfTRoadSafety_Accidents_2013.csv";
@@ -49,6 +53,7 @@ public class AccidentDataProcessor {
 
     private void processFile(){
         int batchCount = 1;
+        ExecutorService executorService = Executors.newFixedThreadPool(20);
         while (!accidentDataReader.hasFinished()){
             List<RoadAccident> roadAccidents = accidentDataReader.getNextBatch();
             log.info("Read [{}] records in batch [{}]", roadAccidents.size(), batchCount++);
@@ -56,8 +61,18 @@ public class AccidentDataProcessor {
             log.info("Enriched records");
             accidentDataWriter.writeAccidentData(roadAccidentDetailsList);
             log.info("Written records");
+            executorService.execute(new Runnable(){
+                @Override
+                public void run()  {
+                    List<RoadAccidentDetails> roadAccidentDetailsList = accidentDataEnricher.enrichRoadAccidentData(roadAccidents);
+                    log.info("Enriched records");
+                    accidentDataWriter.writeAccidentData(roadAccidentDetailsList);
+                    log.info("Written records");
+                }
+            });
         }
     }
+
 
 
     public static void main(String[] args) {
